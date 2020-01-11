@@ -30,9 +30,10 @@ class OrbitalLaunch:
                     date_found = date_found.split('(')[0].rstrip()
                     date_found = datetime.datetime.strptime(date_found, format).replace(year=2019)
                     date_found = str(date_found).split()[0] + 'T' + str(date_found).split()[1] + "+00:00"
-                    map[date_found] = 0
+                    if not date_found in map:
+                        map[date_found] = 0
                 else:
-                    if cols[5].getText().rstrip() in status:
+                    if cols[5].getText().rstrip().split('[')[0] in status:
                         value = map[date_found]
                         value = value + 1
                         map[date_found] = value
@@ -45,7 +46,6 @@ class OrbitalLaunch:
         for i in range(delta.days + 1):
             day = sdate + datetime.timedelta(days=i)
             if day.strftime("%Y-%m-%dT%H:%M:%S+00:00") in map.keys():
-                print(day.strftime("%Y-%m-%dT%H:%M:%S+00:00"))
                 value = map[day.strftime("%Y-%m-%dT%H:%M:%S+00:00")]
                 final_list[day.strftime("%Y-%m-%dT%H:%M:%S+00:00")] = value
             else:
@@ -53,11 +53,12 @@ class OrbitalLaunch:
 
         self.send_results(final_list)
 
-    def send_results(self,map):
-         file = open('output.csv', 'w')
-         file.write("date,value\n")
-         for key in map.keys():
-           file.write(str(key) + "," + str(map[key]) + "\n")
+    def send_results(self, map):
+        file = open('output.csv', 'w')
+        file.write("date,value\n")
+        for key in map.keys():
+            file.write(str(key) + "," + str(map[key]) + "\n")
+        
 
-
-OrbitalLaunch().finder("https://en.wikipedia.org/wiki/2019_in_spaceflight#Orbital_launches")
+find_url = "https://en.wikipedia.org/wiki/2019_in_spaceflight#Orbital_launches"
+OrbitalLaunch().finder(find_url)

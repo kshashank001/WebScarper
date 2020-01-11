@@ -21,7 +21,6 @@ class OrbitalLaunch:
             cols = row.findAll(["td"])
 
             if len(cols) > 2:
-                # print(cols[0].getText())
                 if len(cols) == 5:
                     if cols[0].getText().split('[')[0].split(':')[0][-1].isdigit():
                         date_found = cols[0].getText().split('[')[0].split(':')[0][:-2]
